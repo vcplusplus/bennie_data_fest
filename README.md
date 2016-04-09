@@ -18,3 +18,9 @@ cd bennie_data_fest
 git add .
 
 git commit -m "a message describing what you added"
+
+**share your files with us**
+git push 
+
+**update your repo with our changes**
+git pull
