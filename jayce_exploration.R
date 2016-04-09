@@ -8,6 +8,10 @@ ga.path <- 'data/approved_ga_data_v2.csv'
 sample.size <- 10000
 #load purchases
 purchases.all <- read.csv(purchases.path, na.strings = c("NULL","NA",""))
+purchases.all$la_valid_tkt_event_flg <- as.character(purchases.all$la_valid_tkt_event_flg)
+purchases.all.good <- purchases.all[purchases.all$la_valid_tkt_event_flg == 'Y ',]
+purchases.all.bad <- purchases.all[purchases.all$la_valid_tkt_event_flg != 'Y ',]
+
 set.seed(666)
 purchases.sample <- purchases.all[sample(nrow(purchases.all), sample.size),]
 #subset variables
@@ -20,5 +24,5 @@ purchases.sample.subset$purchase_date <- as.Date(purchases.sample.subset$sales_o
 purchases.sample.subset$event_purchase_difference <- purchases.sample.subset$event_date - purchases.sample.subset$purchase_date
 
 #trim junk events
-purchases.sample.subset.good <- purchases.sample.subset[purchases.sample.subset$la_valid_tkt_event_flg == 2,]
+purchases.sample.subset.good <- subset(purchases.sample.subset,la_valid_tkt_event_flg == 'Y ')
 str(purchases.sample.subset)
