@@ -12,17 +12,27 @@ purchases.all$la_valid_tkt_event_flg <- as.character(purchases.all$la_valid_tkt_
 purchases.all.good <- purchases.all[purchases.all$la_valid_tkt_event_flg == 'Y ',]
 purchases.all.bad <- purchases.all[purchases.all$la_valid_tkt_event_flg != 'Y ',]
 
+purchases.all.good <- subset(purchases.all.good, select = c(1:31,45))
+
 set.seed(666)
-purchases.sample <- purchases.all[sample(nrow(purchases.all), sample.size),]
+purchases.sample.good <- purchases.all.good[sample(nrow(purchases.all.good), sample.size),]
 #subset variables
-purchases.variables <- c(1,10,13,14,15,17:22,27:29,32:35,38,45)
-purchases.sample.subset <- subset(purchases.sample, select = purchases.variables)
+purchases.variables.good <- c(1,5,10,13,14,15,17:22,27:28,32)
+purchases.sample.subset.good <- subset(purchases.sample.good, select = purchases.variables.good)
 
 #compute number of days difference between transaction date and event date
-purchases.sample.subset$event_date <- as.Date(purchases.sample.subset$event_dt)
-purchases.sample.subset$purchase_date <- as.Date(purchases.sample.subset$sales_ord_tran_dt)
-purchases.sample.subset$event_purchase_difference <- purchases.sample.subset$event_date - purchases.sample.subset$purchase_date
+purchases.sample.subset.good$event_date <- as.Date(purchases.sample.subset.good$event_dt)
+purchases.sample.subset.good$purchase_date <- as.Date(purchases.sample.subset.good$sales_ord_tran_dt)
+purchases.sample.subset.good$onsale_date <- as.Date(purchases.sample.subset.good$onsale_dt)
+purchases.sample.subset.good$order_created_date <- as.Date(purchases.sample.subset.good$sales_ord_create_dttm)
+purchases.sample.subset.good$print_date <- as.Date(purchases.sample.subset.good$print_dt)
+
+purchases.sample.subset.good$event_purchase_time_difference <- purchases.sample.subset.good$event_date - purchases.sample.subset.good$purchase_date
+purchases.sample.subset.good$purchase_print_time_difference <- purchases.sample.subset.good$print_date - purchases.sample.subset.good$purchase_date
+purchases.sample.subset.good$onsale_purchase_time_difference <- purchases.sample.subset.good$purchase_date - purchases.sample.subset.good$onsale_date
+purchases.sample.subset.good$order_purchase_time_difference <- purchases.sample.subset.good$purchase_date - purchases.sample.subset.good$order_created_date
+
+purchases.sample.subset.good <- subset(purchases.sample.subset.good, select = c(1:6,13:15, 21:24)) 
 
 #trim junk events
-purchases.sample.subset.good <- subset(purchases.sample.subset,la_valid_tkt_event_flg == 'Y ')
-str(purchases.sample.subset)
+# str(purchases.sample.subset)
